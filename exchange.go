@@ -3,9 +3,12 @@ package hyperliquid
 import (
 	"context"
 	"crypto/ecdsa"
+	"encoding/hex"
 	"encoding/json"
 	"sync/atomic"
 	"time"
+
+	"github.com/ethereum/go-ethereum/signer/core/apitypes"
 )
 
 type Exchange struct {
@@ -159,4 +162,23 @@ func (e *Exchange) postAction(
 	}
 
 	return e.client.post(ctx, "/exchange", payload)
+}
+
+func (e *Exchange) GetTypedData(ctx context.Context, action any) (*apitypes.TypedData, error) {
+	nonce := e.nextNonce()
+
+	// Step 1: Create action hash
+	hash := actionHash(action, e.vault, nonce, e.expiresAfter)
+
+	// Step 2: Construct phantom agent
+	isMainnet := e.client.baseURL == MainnetAPIURL
+	phantomAgent := constructPhantomAgent(hash, isMainnet)
+
+	// Step 3: Create l1 payload
+	typedData := l1Payload(phantomAgent, isMainnet)
+
+	// to avoid byte44 error
+	typedData.Message["connectionId"] = "0x" + hex.EncodeToString(hash)
+
+	return &typedData, nil
 }
