@@ -37,7 +37,7 @@ func NewExchangeV1(
 // nextNonce returns either the current timestamp in milliseconds or incremented by one to prevent duplicates
 // Nonces must be within (T - 2 days, T + 1 day), where T is the unix millisecond timestamp on the block of the transaction.
 // See https://hyperliquid.gitbook.io/hyperliquid-docs/for-developers/api/nonces-and-api-wallets#hyperliquid-nonces
-func (e *ExchangeV1) nextNonce() int64 {
+func (e *ExchangeV1) NextNonce() int64 {
 	// it's possible that at exactly the same time a nextNonce is requested
 	for {
 		last := e.lastNonce.Load()
@@ -67,9 +67,7 @@ func (e *ExchangeV1) SetLastNonce(n int64) {
 	e.lastNonce.Store(n)
 }
 
-func (e *ExchangeV1) GetTypedData(ctx context.Context, action any) (*apitypes.TypedData, error) {
-	nonce := e.nextNonce()
-
+func (e *ExchangeV1) GetTypedData(ctx context.Context, nonce int64, action any) (*apitypes.TypedData, error) {
 	// Step 1: Create action hash
 	hash := actionHash(action, e.vault, nonce, e.expiresAfter)
 
@@ -85,7 +83,6 @@ func (e *ExchangeV1) GetTypedData(ctx context.Context, action any) (*apitypes.Ty
 
 	return &typedData, nil
 }
-
 
 func (e *ExchangeV1) NewCreateOrderAction(
 	orders []CreateOrderRequest,
@@ -107,7 +104,7 @@ func (e *ExchangeV1) NewCreateOrderAction(
 		if err != nil {
 			return OrderAction{}, fmt.Errorf("failed to parse asset for order %d: %w", i, err)
 		}
-		
+
 		orderWire := OrderWire{
 			Asset:      asset,
 			IsBuy:      order.IsBuy,
