@@ -185,17 +185,17 @@ Thanks to all the people who have contributed to this project! 🎉
                 </a>
             </td>
             <td align="center">
-                <a href="https://github.com/gopi-bathala">
-                    <img src="https://avatars.githubusercontent.com/u/31345007?v=4" width="100;" alt="gopi-bathala"/>
-                    <br />
-                    <sub><b>Gopi Bathala</b></sub>
-                </a>
-            </td>
-            <td align="center">
                 <a href="https://github.com/im-vignesh">
                     <img src="https://avatars.githubusercontent.com/u/16088625?v=4" width="100;" alt="im-vignesh"/>
                     <br />
                     <sub><b>Vigneshwaran</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/gopi-bathala">
+                    <img src="https://avatars.githubusercontent.com/u/31345007?v=4" width="100;" alt="gopi-bathala"/>
+                    <br />
+                    <sub><b>Gopi Bathala</b></sub>
                 </a>
             </td>
 		</tr>
