@@ -32,6 +32,8 @@ const (
 	TifIoc Tif = "Ioc"
 	// Good Till Cancel
 	TifGtc Tif = "Gtc"
+	// FrontEnd Market Order
+	TifFrontendMarket Tif = "FrontendMarket"
 )
 
 type Tpsl string // Advanced order type
